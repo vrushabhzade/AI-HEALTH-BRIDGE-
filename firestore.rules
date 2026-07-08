@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read access to all users for doctors and hospitals
+    match /doctors/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    match /hospitals/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // User profiles - users can read/write their own data
+    match /users/{userId} {
+      allow read, write: if request.auth != null && (request.auth.uid == userId || request.auth.token.role == "district_admin" || request.auth.token.role == "phc_staff");
+      
+      // Lab history subcollection
+      match /labHistory/{document=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+    
+    // Appointments - users can read/write their own
+    match /appointments/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Prescriptions - users can read/write their own
+    match /prescriptions/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+
+    // HealthBridge Operations - PHC operational details
+    match /phcs/{phcId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (request.auth.token.role == "phc_staff" || request.auth.token.role == "district_admin");
+
+      match /{subcollection=**} {
+        allow read: if request.auth != null;
+        allow write: if request.auth != null && (request.auth.token.role == "phc_staff" || request.auth.token.role == "district_admin");
+      }
+    }
+
+    // Alerts collection
+    match /alerts/{alertId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (request.auth.token.role == "district_admin" || request.auth.token.role == "phc_staff"); // Allow phc_staff or engine to trigger alerts client-side
+    }
+  }
+}

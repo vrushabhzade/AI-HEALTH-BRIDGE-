@@ -14,6 +14,8 @@ import Prescriptions from './pages/Prescriptions';
 import DoctorDashboard from './pages/DoctorDashboard';
 import PatientProfile from './pages/PatientProfile';
 import AdminDashboard from './pages/AdminDashboard';
+import DistrictAdminDashboard from './pages/DistrictAdminDashboard';
+import PHCStaffDashboard from './pages/PHCStaffDashboard';
 
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -89,18 +91,23 @@ function App() {
                   <Route path="/" element={<SimpleLanding />} />
 
                   {/* Keep these if user wants to switch context, but hide from main flow */}
-                  <Route path="/login" element={<Dashboard />} />
-                  <Route path="/register" element={<Dashboard />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
 
                   {/* Protected Routes (Technically "protected" but user is always guest-authed now) */}
                   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                  <Route path="/doctor-dashboard" element={<ProtectedRoute><DoctorDashboard /></ProtectedRoute>} />
+                  <Route path="/doctor-dashboard" element={<ProtectedRoute requiredRole="doctor"><DoctorDashboard /></ProtectedRoute>} />
                   <Route path="/find-doctors" element={<ProtectedRoute><FindDoctors /></ProtectedRoute>} />
                   <Route path="/video-consult" element={<ProtectedRoute><VideoConsult /></ProtectedRoute>} />
                   <Route path="/prescriptions" element={<ProtectedRoute><Prescriptions /></ProtectedRoute>} />
                   <Route path="/consult" element={<ProtectedRoute><Consultant /></ProtectedRoute>} />
                   <Route path="/profile" element={<ProtectedRoute><PatientProfile /></ProtectedRoute>} />
-                  <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+                  <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
+                  
+                  {/* HealthBridge Operations Routes */}
+                  <Route path="/district-admin" element={<ProtectedRoute requiredRole="district_admin"><DistrictAdminDashboard /></ProtectedRoute>} />
+                  <Route path="/district-admin/:phcId" element={<ProtectedRoute requiredRole="district_admin"><DistrictAdminDashboard /></ProtectedRoute>} />
+                  <Route path="/phc-staff" element={<ProtectedRoute requiredRole="phc_staff"><PHCStaffDashboard /></ProtectedRoute>} />
                 </Routes>
               </main>
             </div>

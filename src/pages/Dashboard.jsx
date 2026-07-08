@@ -10,8 +10,8 @@ import VitalTrends from '../components/VitalTrends';
 import HealthWallet from '../components/HealthWallet';
 import SymptomTimeline from '../components/SymptomTimeline';
 import VideoConsultation from '../components/VideoConsultation';
-import { Activity, Calendar, MapPin, AlertCircle, Heart, Video } from 'lucide-react';
-import { AnimatePresence } from 'framer-motion';
+import { Activity, Calendar, MapPin, Video, Sparkles, ArrowUpRight } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { fetchAppointments } from '../services/api';
 
 const Dashboard = () => {
@@ -22,14 +22,17 @@ const Dashboard = () => {
     const [appointments, setAppointments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    const now = new Date();
+    const hour = now.getHours();
+    const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    const dayStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
     useEffect(() => {
         const loadDashboardData = async () => {
             if (user) {
                 setIsLoading(true);
                 try {
                     const data = await fetchAppointments();
-                    // Filter for appointments relevant to this patient if needed, 
-                    // though the API should ideally return only user's appointments.
                     setAppointments(data.filter(app => app.status === 'Accepted' || app.status === 'Pending'));
                 } catch (error) {
                     console.error('Error loading dashboard data:', error);
@@ -42,111 +45,166 @@ const Dashboard = () => {
     }, [user]);
 
     return (
-        <div className="container" style={{ paddingTop: '100px', paddingBottom: '4rem' }}>
-            <AnimatePresence>
-                {activeSession && (
-                    <VideoConsultation
-                        sessionInfo={activeSession}
-                        onEnd={() => setActiveSession(null)}
-                    />
-                )}
-            </AnimatePresence>
+        <div style={{ minHeight: '100vh', background: 'linear-gradient(160deg, #0a0f1e 0%, #0d1425 60%, #0a1020 100%)' }}>
+            <div className="container" style={{ paddingTop: '100px', paddingBottom: '4rem' }}>
 
-            {/* Welcome Header */}
-            <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                    <h1 style={{ fontSize: '2rem' }}>{t('dashboard.welcome')}, <span className="gradient-text">{user?.name || 'Guest'}</span></h1>
-                    <p style={{ color: 'var(--color-text-secondary)' }}>{t('dashboard.welcomeSubtitle')}</p>
-                </div>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <SOSButton />
-                </div>
-            </div>
+                <AnimatePresence>
+                    {activeSession && (
+                        <VideoConsultation
+                            sessionInfo={activeSession}
+                            onEnd={() => setActiveSession(null)}
+                        />
+                    )}
+                </AnimatePresence>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                {/* ─── PREMIUM WELCOME HEADER ─── */}
+                <motion.div
+                    initial={{ opacity: 0, y: -16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    style={{ marginBottom: '2.5rem' }}
+                >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                        <div>
+                            {/* Eyebrow */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#34d399', boxShadow: '0 0 8px #34d399' }} />
+                                <span style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                    {dayStr}
+                                </span>
+                            </div>
+                            <h1 style={{ fontSize: '2.2rem', fontWeight: '800', margin: 0, lineHeight: 1.1, color: '#f1f5f9' }}>
+                                {greeting},{' '}
+                                <span style={{ background: 'linear-gradient(135deg, #38bdf8, #818cf8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                                    {user?.name || 'Guest'}
+                                </span>
+                            </h1>
+                            <p style={{ color: '#64748b', marginTop: '0.5rem', fontSize: '0.95rem' }}>
+                                Your wellness summary is ready. All vitals are within optimal range today.
+                            </p>
+                        </div>
+                        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                            <button
+                                onClick={() => navigate('/find-doctors')}
+                                style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.6rem 1.1rem', background: 'rgba(56,189,248,0.1)', border: '1px solid rgba(56,189,248,0.25)', borderRadius: '10px', color: '#38bdf8', fontWeight: '600', fontSize: '0.85rem', cursor: 'pointer', transition: 'all 0.2s' }}
+                                onMouseEnter={e => e.currentTarget.style.background = 'rgba(56,189,248,0.18)'}
+                                onMouseLeave={e => e.currentTarget.style.background = 'rgba(56,189,248,0.1)'}
+                            >
+                                <Sparkles size={14} /> Quick Consult <ArrowUpRight size={13} />
+                            </button>
+                            <SOSButton />
+                        </div>
+                    </div>
+                </motion.div>
 
-                {/* Vitals Chart */}
-                <div style={{ gridColumn: 'span 2' }}>
+                {/* ─── VITAL TRENDS (full width) ─── */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    style={{ marginBottom: '2rem' }}
+                >
                     <VitalTrends />
-                </div>
+                </motion.div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    <HealthWallet />
-                    <LabReportAnalyzer />
-                    <SymptomTimeline />
+                {/* ─── LOWER GRID ─── */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
 
-                    <div className="glass-panel" style={{ padding: '1.5rem', flex: 1 }}>
-                        <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                            <Calendar size={20} color="var(--color-warning)" /> {t('dashboard.upcomingAppointments')}
-                        </h3>
+                        {/* Left column */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                            <HealthWallet />
+                            <LabReportAnalyzer />
+                        </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            {isLoading ? (
-                                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Loading appointments...</p>
-                            ) : appointments.length === 0 ? (
-                                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>No upcoming appointments</p>
-                            ) : (
-                                appointments.map((app) => (
-                                    <div key={app.id} style={{ padding: '0.75rem', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <div>
-                                            <div style={{ fontWeight: '600' }}>{app.doctorId?.name || 'Doctor'}</div>
-                                            <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>{app.doctorId?.specialty || 'General Physician'}</div>
+                        {/* Middle column */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                            <SymptomTimeline />
+
+                            {/* Upcoming Appointments */}
+                            <div className="glass-panel" style={{ padding: '1.5rem' }}>
+                                <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', fontSize: '1rem', color: '#f1f5f9' }}>
+                                    <Calendar size={18} color="#f59e0b" /> {t('dashboard.upcomingAppointments')}
+                                </h3>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                    {isLoading ? (
+                                        <p style={{ color: '#475569', fontSize: '0.9rem' }}>Loading appointments...</p>
+                                    ) : appointments.length === 0 ? (
+                                        <div style={{ padding: '1.25rem', textAlign: 'center', border: '1px dashed rgba(255,255,255,0.08)', borderRadius: '10px' }}>
+                                            <p style={{ color: '#475569', fontSize: '0.9rem', margin: 0 }}>No upcoming appointments</p>
+                                            <button
+                                                onClick={() => navigate('/find-doctors')}
+                                                style={{ marginTop: '0.75rem', padding: '0.4rem 0.9rem', background: 'rgba(56,189,248,0.1)', border: '1px solid rgba(56,189,248,0.2)', borderRadius: '8px', color: '#38bdf8', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
+                                            >
+                                                Book a Consultation
+                                            </button>
                                         </div>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                            {app.status === 'Accepted' && (
-                                                <button
-                                                    onClick={() => setActiveSession({ id: app.id, partnerName: app.doctorId?.name })}
-                                                    style={{ padding: '0.5rem 1rem', background: 'var(--color-success)', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.8rem' }}
-                                                >
-                                                    <Video size={14} /> Join Now
-                                                </button>
-                                            )}
-                                            <div style={{ textAlign: 'right' }}>
-                                                <div style={{ color: app.status === 'Pending' ? 'var(--color-warning)' : 'var(--color-accent)' }}>{app.date}</div>
-                                                <div style={{ fontSize: '0.85rem' }}>{app.time}</div>
+                                    ) : (
+                                        appointments.map((app) => (
+                                            <div key={app.id} style={{ padding: '0.75rem', background: 'rgba(255,255,255,0.03)', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                                <div>
+                                                    <div style={{ fontWeight: '600', fontSize: '0.9rem', color: '#f1f5f9' }}>{app.doctorId?.name || 'Doctor'}</div>
+                                                    <div style={{ fontSize: '0.78rem', color: '#64748b' }}>{app.doctorId?.specialty || 'General Physician'}</div>
+                                                </div>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                                    {app.status === 'Accepted' && (
+                                                        <button
+                                                            onClick={() => setActiveSession({ id: app.id, partnerName: app.doctorId?.name })}
+                                                            style={{ padding: '0.4rem 0.8rem', background: 'var(--color-success)', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', fontWeight: '600' }}
+                                                        >
+                                                            <Video size={12} /> Join
+                                                        </button>
+                                                    )}
+                                                    <div style={{ textAlign: 'right' }}>
+                                                        <div style={{ color: app.status === 'Pending' ? '#f59e0b' : '#38bdf8', fontSize: '0.82rem' }}>{app.date}</div>
+                                                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{app.time}</div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                ))
-                            )}
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right column */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                            {/* Nearest Centre */}
+                            <div className="glass-panel" style={{ padding: '1.5rem' }}>
+                                <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', fontSize: '1rem', color: '#f1f5f9' }}>
+                                    <MapPin size={18} color="#34d399" /> Nearest Centre
+                                </h3>
+                                <p style={{ color: '#94a3b8', marginBottom: '0.3rem', fontWeight: '600' }}>Nagpur Rural PHC #4</p>
+                                <div style={{ fontSize: '0.85rem', color: '#64748b' }}>2.5 km away • Open until 8 PM</div>
+                                <button style={{ marginTop: '1rem', width: '100%', padding: '0.55rem', background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.2)', borderRadius: '8px', color: '#34d399', cursor: 'pointer', fontWeight: '600', fontSize: '0.85rem', transition: 'all 0.2s' }}
+                                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(52,211,153,0.15)'}
+                                    onMouseLeave={e => e.currentTarget.style.background = 'rgba(52,211,153,0.08)'}
+                                >
+                                    Get Directions →
+                                </button>
+                            </div>
+                            <BedTracker />
                         </div>
                     </div>
+                </motion.div>
 
-                    <div className="glass-panel" style={{ padding: '1.5rem', flex: 1 }}>
-                        <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                            <MapPin size={20} color="var(--color-success)" /> Nearest Centre
-                        </h3>
-                        <p style={{ color: 'var(--color-text-secondary)', marginBottom: '0.5rem' }}>
-                            Nagpur Rural PHC #4
-                        </p>
-                        <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-                            2.5 km away • Open until 8 PM
-                        </div>
-                        <button style={{ marginTop: '1rem', width: '100%', padding: '0.5rem', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '6px', color: 'var(--color-accent)', cursor: 'pointer' }}>
-                            Get Directions
-                        </button>
-                    </div>
-                    <BedTracker />
-                </div>
-
-                {/* Symptom Checker Widget */}
-                <div style={{ gridColumn: 'span 3' }}>
-                    <h2 style={{ marginBottom: '1rem', marginTop: '1rem' }}>AI Symptom Checker</h2>
+                {/* ─── AI SYMPTOM CHECKER ─── */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    style={{ marginTop: '2rem' }}
+                >
+                    <h2 style={{ marginBottom: '1rem', fontSize: '1.4rem', fontWeight: '700', color: '#f1f5f9' }}>AI Symptom Checker</h2>
                     <SymptomChecker />
-                </div>
+                </motion.div>
 
             </div>
-            <style>{`
-        @media (min-width: 1024px) {
-            .glass-panel[style*="gridColumn: 'span 2'"] { grid-column: span 2; }
-            div[style*="gridColumn: 'span 3'"] { grid-column: span 3; }
-        }
-        @media (max-width: 768px) {
-            .glass-panel[style*="gridColumn: 'span 2'"] { grid-column: span 1 !important; }
-            div[style*="gridColumn: 'span 3'"] { grid-column: span 1 !important; }
-        }
-      `}</style>
-        </div >
+        </div>
     );
 };
 

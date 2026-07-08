@@ -172,3 +172,56 @@ export const explainPrescription = async (prescription, language = 'English') =>
     return "Could not generate explanation at this time.";
   }
 };
+
+/**
+ * Generates an AI-powered natural language recommendation for stockout and resource redistribution.
+ */
+export const generateOpsRecommendation = async ({ phcName, itemName, daysOfSupply, redistributionCandidate, language = 'en' }) => {
+  try {
+    let langName = 'English';
+    if (language === 'hi') langName = 'Hindi';
+    if (language === 'mr') langName = 'Marathi';
+
+    let redistributionText = '';
+    if (redistributionCandidate) {
+      redistributionText = `Redistribution Candidate available: PHC/CHC "${redistributionCandidate.fromPhcName}" has surplus, and we recommend transferring ${redistributionCandidate.suggestedQty} units to "${phcName}".`;
+    } else {
+      redistributionText = 'No redistribution candidate is currently available within the same district.';
+    }
+
+    const prompt = `
+      Act as "HealthBridge Ops AI", a district-level healthcare operations analyst for Nagpur Health Network.
+      
+      CONTEXT:
+      - Health Facility: ${phcName}
+      - Critically Low Item: ${itemName}
+      - Days of Supply Remaining: ${daysOfSupply} days
+      - ${redistributionText}
+      - Target Language: ${langName}
+      
+      INSTRUCTIONS:
+      - Generate a SHORT, plain-language operational recommendation (exactly 1-2 sentences).
+      - Do not calculate any numbers. Use the provided numbers exactly.
+      - Tone: Professional, urgent, and action-oriented.
+      - Translate the recommendation directly into the target language (${langName}).
+      
+      Example English: "${phcName} will stock out of ${itemName} in ${daysOfSupply} days. Recommend transferring ${redistributionCandidate?.suggestedQty || 'X'} units from ${redistributionCandidate?.fromPhcName || 'surplus centres'} immediately."
+    `;
+
+    console.log(`🤖 Generating Ops Recommendation in ${langName}...`);
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text().trim();
+  } catch (error) {
+    console.error("Gemini Ops Recommendation Error:", error);
+    // Return a deterministic fallback recommendation if the AI fails
+    let fallback = `${phcName} will stock out of ${itemName} in ${daysOfSupply} days. `;
+    if (redistributionCandidate) {
+      fallback += `Recommend redistributing ${redistributionCandidate.suggestedQty} units from ${redistributionCandidate.fromPhcName}.`;
+    } else {
+      fallback += `Please request urgent supply replenishment from central warehouse.`;
+    }
+    return fallback;
+  }
+};
+

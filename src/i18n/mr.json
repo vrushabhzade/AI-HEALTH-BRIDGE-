@@ -53,6 +53,72 @@
         "totalPatients": "एकूण रुग्ण",
         "avgWaitTime": "सरासरी प्रतीक्षा वेळ",
         "incomingRequests": "येणारे विनंत्या",
-        "noPending": "कोणत्याही प्रलंबित भेटी नाहीत."
+        "noPending": "कोणत्याही प्रलंबित भेटी नाहीत।"
+    },
+    "ops": {
+        "stockMonitor": {
+            "title": "स्टॉक इन्व्हेंटरी मॉनिटर",
+            "daysRemaining": "{{days}} दिवसांचा साठा शिल्लक",
+            "logEntry": "वापर / नवीन साठा नोंदवा",
+            "reorderThreshold": "पुनः ऑर्डर मर्यादा",
+            "critical": "गंभीर टंचाई",
+            "low": "कमी साठा",
+            "sufficient": "पुरेसा",
+            "itemName": "वस्तूचे नाव",
+            "qty": "सध्याची संख्या",
+            "consume": "वापर",
+            "restock": "नवीन साठा",
+            "qtyField": "प्रमाण",
+            "submit": "नोंदणी सबमिट करा",
+            "category": "वर्ग",
+            "criticalFlag": "महत्त्वाची वस्तू"
+        },
+        "footfall": {
+            "title": "रुग्ण संख्या ट्रॅकर",
+            "logEntry": "दैनिक विभाग रुग्ण संख्या नोंदवा",
+            "total": "आज एकूण रुग्ण",
+            "peakHour": "गर्दीची वेळ",
+            "capacity": "केंद्र क्षमता",
+            "overloadWarning": "क्षमतेपेक्षा जास्त! (मर्यादेच्या {{percent}}%)"
+        },
+        "attendance": {
+            "title": "डॉक्टर उपस्थिती कन्सोल",
+            "checkIn": "चेक इन",
+            "checkOut": "चेक आउट",
+            "absent": "गैरहजर नोंदवा",
+            "absenceRate": "गैरहजेरीचे प्रमाण",
+            "thresholdWarning": "१५% पेक्षा जास्त गैरहजेरी!",
+            "doctor": "डॉक्टरांचे नाव",
+            "status": "शिफ्ट स्थिती"
+        },
+        "diagnostics": {
+            "title": "डिटेक्शन टेस्ट ऑडिट पॅनेल",
+            "functional": "कार्यरत",
+            "down": "मशीन बंद आहे",
+            "noReagent": "अभिकर्मक (Reagent) नाही",
+            "logAudit": "तपासणी ऑडिट नोंदवा",
+            "equipment": "आवश्यक उपकरणे",
+            "status": "सेवा स्थिती"
+        },
+        "beds": {
+            "title": "PHC बेड उपलब्धता ट्रॅकर",
+            "general": "सामान्य खाटा",
+            "icu": "आयसीयू खाटा",
+            "update": "उपलब्धता अपडेट करा",
+            "critical": "खाटांची संख्या अत्यंत कमी!"
+        },
+        "alerts": {
+            "title": "संचालन चेतावणी फीड",
+            "stockout": "तुटवडा निर्माण होण्याचा धोका",
+            "attendanceGap": "गैरहजेरी चेतावणी",
+            "underperforming": "कमी कामगिरी करणाऱ्या केंद्राची चेतावणी",
+            "bedCritical": "खाटांची टंचाई संकट",
+            "recommendation": "जेमिनी एआई शिफारस"
+        },
+        "forecast": {
+            "title": "एआय पुनर्वितरण आणि अंदाज",
+            "redistributionCard": "साधनसंपत्ती पुनर्वितरण योजना",
+            "underperformanceIndex": "PHC कामगिरी निर्देशांक"
+        }
     }
 }

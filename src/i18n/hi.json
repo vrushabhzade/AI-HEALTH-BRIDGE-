@@ -54,5 +54,71 @@
         "avgWaitTime": "औसत प्रतीक्षा समय",
         "incomingRequests": "आने वाले अनुरोध",
         "noPending": "कोई लंबित नियुक्तियां नहीं हैं।"
+    },
+    "ops": {
+        "stockMonitor": {
+            "title": "स्टॉक इन्वेंटरी मॉनिटर",
+            "daysRemaining": "{{days}} दिनों की आपूर्ति शेष",
+            "logEntry": "खपत / पुनः स्टॉक दर्ज करें",
+            "reorderThreshold": "पुनः ऑर्डर सीमा",
+            "critical": "गंभीर कमी",
+            "low": "कम स्टॉक",
+            "sufficient": "पर्याप्त",
+            "itemName": "वस्तु का नाम",
+            "qty": "वर्तमान मात्रा",
+            "consume": "खपत",
+            "restock": "पुनः स्टॉक",
+            "qtyField": "मात्रा",
+            "submit": "प्रविष्टि दर्ज करें",
+            "category": "श्रेणी",
+            "criticalFlag": "महत्वपूर्ण वस्तु"
+        },
+        "footfall": {
+            "title": "मरीज फुटफॉल ट्रैकर",
+            "logEntry": "दैनिक विभाग फुटफॉल दर्ज करें",
+            "total": "आज कुल मरीज",
+            "peakHour": "उच्चतम समय",
+            "capacity": "केंद्र क्षमता",
+            "overloadWarning": "क्षमता से अधिक! (सीमा का {{percent}}%)"
+        },
+        "attendance": {
+            "title": "डॉक्टर उपस्थिति कंसोल",
+            "checkIn": "चेक इन",
+            "checkOut": "चेक आउट",
+            "absent": "अनुपस्थित चिह्नित करें",
+            "absenceRate": "अनुपस्थिति दर",
+            "thresholdWarning": "15% से अधिक अनुपस्थिति दर!",
+            "doctor": "डॉक्टर का नाम",
+            "status": "शिफ्ट स्थिति"
+        },
+        "diagnostics": {
+            "title": "डायग्नोस्टिक्स ऑडिट पैनल",
+            "functional": "कार्यात्मक",
+            "down": "उपकरण खराब",
+            "noReagent": "अभिकर्मक (Reagent) नहीं है",
+            "logAudit": "डायग्नोस्टिक ऑडिट जांच दर्ज करें",
+            "equipment": "आवश्यक उपकरण",
+            "status": "सेवा स्थिति"
+        },
+        "beds": {
+            "title": "PHC बेड स्थिति ट्रैकर",
+            "general": "सामान्य बेड",
+            "icu": "आईसीयू बेड",
+            "update": "बेड अधिभोग अपडेट करें",
+            "critical": "बेड क्षमता गंभीर स्थिति में!"
+        },
+        "alerts": {
+            "title": "संचालन चेतावनी फ़ीड",
+            "stockout": "स्टॉकआउट जोखिम पाया गया",
+            "attendanceGap": "उपस्थिति अंतर चेतावनी",
+            "underperforming": "कम प्रदर्शन करने वाले केंद्र की चेतावनी",
+            "bedCritical": "बेड क्षमता संकट",
+            "recommendation": "जेमिनी एआई सिफारिश"
+        },
+        "forecast": {
+            "title": "एआई पुनर्वितरण और पूर्वानुमान",
+            "redistributionCard": "संसाधन पुनर्वितरण योजना",
+            "underperformanceIndex": "PHC न्यून-प्रदर्शन सूचकांक"
+        }
     }
 }

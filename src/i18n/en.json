@@ -54,5 +54,71 @@
         "avgWaitTime": "Avg. Wait Time",
         "incomingRequests": "Incoming Requests",
         "noPending": "No pending appointments."
+    },
+    "ops": {
+        "stockMonitor": {
+            "title": "Stock Inventory Monitor",
+            "daysRemaining": "{{days}} days of supply remaining",
+            "logEntry": "Log Consumption / Restock",
+            "reorderThreshold": "Reorder Threshold",
+            "critical": "Critical Stock",
+            "low": "Low Stock",
+            "sufficient": "Sufficient",
+            "itemName": "Item Name",
+            "qty": "Current Quantity",
+            "consume": "Consume",
+            "restock": "Restock",
+            "qtyField": "Quantity",
+            "submit": "Submit Entry",
+            "category": "Category",
+            "criticalFlag": "Critical Item"
+        },
+        "footfall": {
+            "title": "Patient Footfall Tracker",
+            "logEntry": "Log Daily Department Footfall",
+            "total": "Total Patients Today",
+            "peakHour": "Peak Hour",
+            "capacity": "Centre Capacity",
+            "overloadWarning": "Capacity Overload! ({{percent}}% of limit)"
+        },
+        "attendance": {
+            "title": "Doctor Attendance Console",
+            "checkIn": "Check In",
+            "checkOut": "Check Out",
+            "absent": "Mark Absent",
+            "absenceRate": "Absence Rate",
+            "thresholdWarning": "Exceeds 15% absence rate!",
+            "doctor": "Doctor Name",
+            "status": "Shift Status"
+        },
+        "diagnostics": {
+            "title": "Diagnostics Audit Panel",
+            "functional": "Functional",
+            "down": "Equipment Down",
+            "noReagent": "No Reagents",
+            "logAudit": "Log Diagnostic Audit Check",
+            "equipment": "Equipment Required",
+            "status": "Service Status"
+        },
+        "beds": {
+            "title": "PHC Bed Status Tracker",
+            "general": "General Beds",
+            "icu": "ICU Beds",
+            "update": "Update Occupancy",
+            "critical": "Bed Capacity Critical!"
+        },
+        "alerts": {
+            "title": "Operations Alert Feed",
+            "stockout": "Stockout Risk Detected",
+            "attendanceGap": "Attendance Gap Warning",
+            "underperforming": "Underperforming Center Alert",
+            "bedCritical": "Bed Capacity Crisis",
+            "recommendation": "Gemini AI Recommendation"
+        },
+        "forecast": {
+            "title": "AI Redistribution & Forecast",
+            "redistributionCard": "Resource Redistribution Plan",
+            "underperformanceIndex": "PHC Underperformance Index"
+        }
     }
 }

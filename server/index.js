@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { adminDb } from './firebaseAdmin.js';
+import { seedPHCData } from './seedPHCs.js';
 
 dotenv.config();
 
@@ -66,6 +67,7 @@ const seedHospitals = async () => {
 // Seed on startup
 seedDoctors();
 seedHospitals();
+seedPHCData();
 
 // Routes
 app.get('/api/health', (req, res) => {

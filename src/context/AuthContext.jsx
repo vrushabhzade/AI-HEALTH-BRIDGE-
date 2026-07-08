@@ -64,17 +64,25 @@ export const AuthProvider = ({ children }) => {
                             setUser(firebaseUser);
                         }
                     } else {
-                        // NO REAL USER -> SET GUEST USER
-                        console.log("⚡ Auto-logging in as Guest/Demo User");
-                        const guestUser = {
-                            uid: "guest-user-123",
-                            email: "guest@nagpur-health.com",
-                            name: "Guest User",
-                            role: "patient",
-                            isGuest: true
-                        };
-                        setUser(guestUser);
-                        localStorage.setItem('user', JSON.stringify(guestUser));
+                        // NO REAL USER -> Check localStorage for persisted demo session (role switcher)
+                        const cachedUserRaw = localStorage.getItem('user');
+                        if (cachedUserRaw) {
+                            try {
+                                const cachedUser = JSON.parse(cachedUserRaw);
+                                console.log("⚡ Restoring cached demo session:", cachedUser.role);
+                                setUser(cachedUser);
+                            } catch (e) {
+                                localStorage.removeItem('user');
+                                const guestUser = { uid: "guest-user-123", email: "guest@nagpur-health.com", name: "Guest User", role: "patient", isGuest: true };
+                                setUser(guestUser);
+                                localStorage.setItem('user', JSON.stringify(guestUser));
+                            }
+                        } else {
+                            console.log("⚡ Auto-logging in as Guest/Demo User");
+                            const guestUser = { uid: "guest-user-123", email: "guest@nagpur-health.com", name: "Guest User", role: "patient", isGuest: true };
+                            setUser(guestUser);
+                            localStorage.setItem('user', JSON.stringify(guestUser));
+                        }
                     }
                     setLoading(false);
                 });
